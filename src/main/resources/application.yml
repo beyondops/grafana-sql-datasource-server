@@ -1,0 +1,20 @@
+
+logging:
+  level:
+    com.beyondops: DEBUG
+
+sqlquery:
+  datasources:
+    - name: ds1
+      type: mysql
+      url: jdbc:mysql://localhost:3301/ds1?useSSL=false&useUnicode=true&characterEncoding=UTF-8
+      username: root
+      password: beyondops1234
+      driver: com.mysql.jdbc.Driver
+
+    - name: ds2
+      type: mysql
+      url: jdbc:mysql://localhost:3302/ds2?useSSL=false&useUnicode=true&characterEncoding=UTF-8
+      username: root
+      password: beyondops1234
+      driver: com.mysql.jdbc.Driver
