@@ -30,7 +30,7 @@ public class SqlQueryController {
 
 
     @PostMapping("/query")
-    public List search(@RequestBody final GrafanaQuery grafanaQuery) {
+    public List query(@RequestBody final GrafanaQuery grafanaQuery) {
         List result = Lists.newArrayList();
         if (null == grafanaQuery.getTargets() || grafanaQuery.getTargets().size() < 1) {
             log.warn("Empty targets!");
