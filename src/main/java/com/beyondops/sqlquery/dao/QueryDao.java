@@ -25,7 +25,7 @@ public class QueryDao {
     @Autowired
     JdbcTemplate jdbcTemplate;
 
-    public QueryResult query(String name, String sql) {
+    public QueryResult query(String sql) {
 
         QueryResult queryResult = new QueryResult();
         List<Column> columnList = Lists.newArrayList();

@@ -10,7 +10,7 @@ import lombok.Data;
 @Data
 public class Target implements Serializable {
 
-    private String target;
+    private TargetConfig target;
     private String refId;
     private String type;
 

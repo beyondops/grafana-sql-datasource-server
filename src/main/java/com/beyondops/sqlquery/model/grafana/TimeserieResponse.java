@@ -1,5 +1,6 @@
 package com.beyondops.sqlquery.model.grafana;
 
+import com.google.common.collect.Lists;
 import java.util.List;
 import lombok.Data;
 
@@ -11,4 +12,9 @@ public class TimeserieResponse {
 
     private String target;
     private List datapoints;
+
+    public TimeserieResponse() {
+        this.target = "unknown";
+        this.datapoints = Lists.newArrayList();
+    }
 }

@@ -19,11 +19,11 @@ public class QueryServiceTest {
 
     @Test
     public void testQuery() {
-        String name = "ds1";
-        String sql = "SELECT * FROM ds1_user";
-        queryService.query(name, sql);
-        name = "ds2";
-        sql = "SELECT * FROM ds2_user";
-        queryService.query(name, sql);
+//        String name = "ds1";
+//        String sql = "SELECT * FROM ds1_user";
+//        queryService.query(name, sql);
+//        name = "ds2";
+//        sql = "SELECT * FROM ds2_user";
+//        queryService.query(name, sql);
     }
 }
