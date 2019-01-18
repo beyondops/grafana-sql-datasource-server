@@ -15,17 +15,17 @@ docker run \
     -v $PWD/src/test/resources/ds1.sql:/docker-entrypoint-initdb.d/ds1.sql \
     mariadb:10.4
 
-docker stop mysql2
+docker stop postgres1
 
 docker run \
     --rm \
     -d \
-    --name mysql2 \
-    -p 3302:3306 \
-    -e MYSQL_DATABASE=ds2 \
-    -e MYSQL_ROOT_PASSWORD=beyondops1234 \
+    --name postgres1 \
+    -p 5432:5432 \
+    -e POSTGRES_DB=ds2 \
+    -e POSTGRES_PASSWORD=beyondops1234 \
     -v $PWD/src/test/resources/ds2.sql:/docker-entrypoint-initdb.d/ds2.sql \
-    mariadb:10.4
+    postgres:11-alpine
 
 
 echo "Done"
