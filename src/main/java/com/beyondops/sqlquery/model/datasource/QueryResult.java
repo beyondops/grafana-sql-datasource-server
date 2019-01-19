@@ -22,9 +22,23 @@ public class QueryResult {
         "tags",
         "title"
     };
+    private static final String[] searchResponseFields = {
+        "text",
+        "value"
+    };
+
 
     public boolean checkAnnotationColumn() {
         for (String field : annotationFields) {
+            if (!mapColumn.containsKey(field)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean checkSearchResponseColumn() {
+        for (String field : searchResponseFields) {
             if (!mapColumn.containsKey(field)) {
                 return false;
             }

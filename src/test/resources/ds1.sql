@@ -24,3 +24,19 @@ INSERT INTO ds1_timeserie VALUES
   (8, date_add(now(), INTERVAL -7 HOUR), 'target1', 10.4),
   (9, date_add(now(), INTERVAL -8 HOUR), 'target1', 7.8),
   (10, date_add(now(), INTERVAL -9 HOUR), 'target1', 17.3);
+
+CREATE TABLE ds1_user_score (
+  uid    INT,
+  course VARCHAR(50),
+  score  FLOAT
+);
+
+INSERT ds1_user_score VALUES
+  (1, 'Math', 85.4),
+  (1, 'Art', 50.4),
+  (1, 'English', 90.4),
+  (1, 'Sport', 84.4),
+  (2, 'Math', 95.4),
+  (2, 'Art', 80.4),
+  (2, 'English', 96.4),
+  (2, 'Sport', 74.4);

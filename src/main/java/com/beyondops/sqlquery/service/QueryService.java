@@ -5,9 +5,10 @@ import com.beyondops.sqlquery.datasource.MultipleDataSourceHolder;
 import com.beyondops.sqlquery.model.datasource.QueryResult;
 import com.beyondops.sqlquery.model.grafana.AnnotationQuery;
 import com.beyondops.sqlquery.model.grafana.AnnotationResponse;
-import com.beyondops.sqlquery.model.grafana.GrafanaQuery;
+import com.beyondops.sqlquery.model.grafana.QueryRequest;
+import com.beyondops.sqlquery.model.grafana.SearchQuery;
+import com.beyondops.sqlquery.model.grafana.SearchResponse;
 import com.beyondops.sqlquery.model.grafana.TableResponse;
-import com.beyondops.sqlquery.model.grafana.Target;
 import com.beyondops.sqlquery.model.grafana.TimeserieResponse;
 import com.google.common.collect.Lists;
 import java.util.List;
@@ -26,15 +27,15 @@ public class QueryService {
     @Autowired
     QueryDao queryDao;
 
-    public List<Object> query(GrafanaQuery grafanaQuery) {
+    public List<Object> query(final List<QueryRequest> queryRequests) {
         List<Object> result = Lists.newArrayList();
-        for (Target target : grafanaQuery.getTargets()) {
-            QueryResult queryResult = queryFromDB(target.getTarget().getDatasource(),
-                target.getTarget().getRawSql());
-            if ("table".equals(target.getType())) {
-                result.add(queryResultToTableResponse(target, queryResult));
+        for (QueryRequest queryRequest : queryRequests) {
+            QueryResult queryResult = queryFromDB(queryRequest.getDatasource(),
+                queryRequest.getRawSql());
+            if ("table".equals(queryRequest.getType())) {
+                result.add(queryResultToTableResponse(queryResult));
             } else {
-                result.add(queryResultToTimeserieResponse(target, queryResult));
+                result.add(queryResultToTimeserieResponse(queryRequest.getName(), queryResult));
             }
         }
         return result;
@@ -59,6 +60,19 @@ public class QueryService {
         return result;
     }
 
+    public List<SearchResponse> search(SearchQuery searchQuery) {
+        List<SearchResponse> result = Lists.newArrayList();
+        QueryResult queryResult = queryFromDB(searchQuery.getDatasource(), searchQuery.getRawSql());
+
+        if (queryResult.getColumns().size() == 1) {
+            return queryResultToSearchResponseForOneColumn(queryResult);
+        }
+        if (queryResult.checkSearchResponseColumn()) {
+            return queryResultToSearchResponseForTwoColumn(queryResult);
+        }
+        return result;
+    }
+
     public QueryResult queryFromDB(String datasource, String query) {
         MultipleDataSourceHolder.setRouteKey(datasource);
         QueryResult queryResult = queryDao.query(query);
@@ -66,13 +80,36 @@ public class QueryService {
         return queryResult;
     }
 
+    public List<SearchResponse> queryResultToSearchResponseForOneColumn(QueryResult queryResult) {
+        List<SearchResponse> result = Lists.newArrayList();
+        for (List row : queryResult.getResult()) {
+            SearchResponse searchResponse = new SearchResponse();
+            String value = "" + row.get(0);
+            searchResponse.setText(value);
+            searchResponse.setValue(value);
+            result.add(searchResponse);
+        }
+        return result;
+    }
+
+    public List<SearchResponse> queryResultToSearchResponseForTwoColumn(QueryResult queryResult) {
+        List<SearchResponse> result = Lists.newArrayList();
+        for (Map<String, Object> row : queryResult.getMapResult()) {
+            SearchResponse searchResponse = new SearchResponse();
+            searchResponse.setText(row.get("text").toString());
+            searchResponse.setValue(row.get("value"));
+            result.add(searchResponse);
+        }
+        return result;
+    }
+
     /**
      * Map result to TimeserieResponse
      */
-    public TimeserieResponse queryResultToTimeserieResponse(Target target,
+    public TimeserieResponse queryResultToTimeserieResponse(String name,
         QueryResult queryResult) {
         TimeserieResponse timeserieResponse = new TimeserieResponse();
-        timeserieResponse.setTarget(target.getTarget().getTarget());
+        timeserieResponse.setTarget(name);
         timeserieResponse.setDatapoints(queryResult.getResult());
         return timeserieResponse;
     }
@@ -80,7 +117,7 @@ public class QueryService {
     /**
      * Map result to TableResponse
      */
-    public TableResponse queryResultToTableResponse(Target target, QueryResult queryResult) {
+    public TableResponse queryResultToTableResponse(QueryResult queryResult) {
         TableResponse tableResponse = new TableResponse();
         tableResponse.setColumns(queryResult.getColumns());
         tableResponse.setRows(queryResult.getResult());
