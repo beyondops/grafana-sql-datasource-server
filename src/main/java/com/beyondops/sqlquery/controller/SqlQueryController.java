@@ -1,10 +1,12 @@
 package com.beyondops.sqlquery.controller;
 
+import com.beyondops.sqlquery.model.grafana.AnnotationQuery;
 import com.beyondops.sqlquery.model.grafana.GrafanaQuery;
 import com.beyondops.sqlquery.service.QueryService;
 import com.google.common.collect.Lists;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -38,6 +40,18 @@ public class SqlQueryController {
         }
 
         result = queryService.query(grafanaQuery);
+        return result;
+    }
+
+    @PostMapping("/annotations")
+    public List annotation(@RequestBody final AnnotationQuery annotationQuery) {
+        List result = Lists.newArrayList();
+        if (null == annotationQuery.getAnnotation() || Strings
+            .isEmpty(annotationQuery.getAnnotation().getQuery())) {
+            log.warn("Please input query!");
+            return result;
+        }
+        result = queryService.annotation(annotationQuery);
         return result;
     }
 }
