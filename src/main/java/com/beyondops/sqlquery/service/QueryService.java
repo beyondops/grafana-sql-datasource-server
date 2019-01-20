@@ -11,6 +11,7 @@ import com.beyondops.sqlquery.model.grafana.SearchResponse;
 import com.beyondops.sqlquery.model.grafana.TableResponse;
 import com.beyondops.sqlquery.model.grafana.TimeserieResponse;
 import com.google.common.collect.Lists;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
@@ -35,7 +36,7 @@ public class QueryService {
             if ("table".equals(queryRequest.getType())) {
                 result.add(queryResultToTableResponse(queryResult));
             } else {
-                result.add(queryResultToTimeserieResponse(queryRequest.getName(), queryResult));
+                queryResultToTimeserieResponse(result, queryResult);
             }
         }
         return result;
@@ -106,12 +107,30 @@ public class QueryService {
     /**
      * Map result to TimeserieResponse
      */
-    public TimeserieResponse queryResultToTimeserieResponse(String name,
+    public List<Object> queryResultToTimeserieResponse(List<Object> result,
         QueryResult queryResult) {
-        TimeserieResponse timeserieResponse = new TimeserieResponse();
-        timeserieResponse.setTarget(name);
-        timeserieResponse.setDatapoints(queryResult.getResult());
-        return timeserieResponse;
+        if (!queryResult.checkQueryResponseColumn()) {
+            return null;
+        }
+        Map<String, List<List<Object>>> series = new HashMap<>();
+        for (Map<String, Object> row : queryResult.getMapResult()) {
+            String target = (String) row.get("metric");
+            if (!series.containsKey(target)) {
+                List<List<Object>> datapoints = Lists.newArrayList();
+                series.put(target, datapoints);
+            }
+            List<Object> datapoint = Lists.newArrayList();
+            datapoint.add(row.get("value"));
+            datapoint.add((long) row.get("time_sec") * 1000);
+            series.get(target).add(datapoint);
+        }
+        for (String key : series.keySet()) {
+            TimeserieResponse timeserieResponse = new TimeserieResponse();
+            timeserieResponse.setTarget(key);
+            timeserieResponse.setDatapoints(series.get(key));
+            result.add(timeserieResponse);
+        }
+        return result;
     }
 
     /**

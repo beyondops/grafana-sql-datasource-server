@@ -23,7 +23,17 @@ INSERT INTO ds1_timeserie VALUES
   (7, date_add(now(), INTERVAL -6 HOUR), 'target1', 12.3),
   (8, date_add(now(), INTERVAL -7 HOUR), 'target1', 10.4),
   (9, date_add(now(), INTERVAL -8 HOUR), 'target1', 7.8),
-  (10, date_add(now(), INTERVAL -9 HOUR), 'target1', 17.3);
+  (10, date_add(now(), INTERVAL -9 HOUR), 'target1', 17.3),
+  (11, date_add(now(), INTERVAL 0 HOUR), 'target2', 15.3),
+  (12, date_add(now(), INTERVAL -1 HOUR), 'target2', 22.2),
+  (13, date_add(now(), INTERVAL -2 HOUR), 'target2', 24.3),
+  (14, date_add(now(), INTERVAL -3 HOUR), 'target2', 20.1),
+  (15, date_add(now(), INTERVAL -4 HOUR), 'target2', 54.3),
+  (16, date_add(now(), INTERVAL -5 HOUR), 'target2', 18.6),
+  (17, date_add(now(), INTERVAL -6 HOUR), 'target2', 22.3),
+  (18, date_add(now(), INTERVAL -7 HOUR), 'target2', 40.4),
+  (19, date_add(now(), INTERVAL -8 HOUR), 'target2', 2.8),
+  (20, date_add(now(), INTERVAL -9 HOUR), 'target2', 47.3);
 
 CREATE TABLE ds1_user_score (
   uid    INT,

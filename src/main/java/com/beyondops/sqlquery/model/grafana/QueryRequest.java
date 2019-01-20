@@ -14,6 +14,5 @@ public class QueryRequest {
     private String datasource;
     private String rawSql;
     private String type;
-    private String name;
 
 }

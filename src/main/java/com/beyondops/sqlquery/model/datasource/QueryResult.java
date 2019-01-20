@@ -16,6 +16,12 @@ public class QueryResult {
     List<List<Object>> result;
     List<Map<String, Object>> mapResult;
 
+    private static final String[] queryResponseFields = {
+        "time_sec",
+        "value",
+        "metric"
+    };
+
     private static final String[] annotationFields = {
         "time",
         "text",
@@ -39,6 +45,15 @@ public class QueryResult {
 
     public boolean checkSearchResponseColumn() {
         for (String field : searchResponseFields) {
+            if (!mapColumn.containsKey(field)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean checkQueryResponseColumn() {
+        for (String field : queryResponseFields) {
             if (!mapColumn.containsKey(field)) {
                 return false;
             }
