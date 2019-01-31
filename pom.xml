@@ -11,8 +11,8 @@
   </parent>
   <groupId>com.beyondops</groupId>
   <artifactId>sql-query</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
-  <name>sql-query</name>
+  <version>0.0.1-RELEASE</version>
+  <name>grafana-sql-datasource-server</name>
   <description>Query data from SQL databases</description>
 
   <properties>
