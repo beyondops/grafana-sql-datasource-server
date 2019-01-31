@@ -1,5 +1,6 @@
 package com.beyondops.sqlquery.service;
 
+import com.beyondops.sqlquery.model.datasource.QueryResult;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,5 +26,10 @@ public class QueryServiceTest {
 //        name = "ds2";
 //        sql = "SELECT * FROM ds2_user";
 //        queryService.query(name, sql);
+    }
+
+    @Test
+    public void testImpala() {
+        QueryResult queryResult = queryService.queryFromDB("ds3", "select 1");
     }
 }

@@ -14,7 +14,14 @@ sqlquery:
 
     - name: ds2
       type: postgres
-      url: jdbc:postgresql://localhost:5432/ds2?ssl=false";
+      url: jdbc:postgresql://localhost:5432/ds2?ssl=false;
       username: postgres
       password: beyondops1234
       driver: org.postgresql.Driver
+
+    - name: ds3
+      type: impala
+      url: jdbc:hive2://impala-ip:21050/database;
+      username: username
+      password: password
+      driver: org.apache.hive.jdbc.HiveDriver
